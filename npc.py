@@ -7,7 +7,7 @@ class NPC(AnimatedSprite):
         self.attack_images = self.get_images(self.path + '/attack')
         self.death = self.get_images(self.path + '/death')
         self.idle = self.get_images(self.path + '/idle')
-        self.pain = self.get_images(self.path + '/pain')
+        self.pain_images = self.get_images(self.path + '/pain')
         self.walk_images = self.get_images(self.path + '/walk')
 
         self.attack_dist = randint(3, 6)
@@ -22,3 +22,23 @@ class NPC(AnimatedSprite):
     def update(self):
         self.check_animation_time()
         self.get_sprite()
+        self.run_logic()
+
+    def animate_pain(self):
+        self.animate(self.pain_images)
+        if self.animation_trigger:
+            self.pain = False    
+
+    def check_hit_in_npc(self):
+        if self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.player.shot = False
+                self.pain = True    
+
+    def run_logic(self):
+        if self.alive:
+            self.check_hit_in_npc()
+            if self.pain:
+                self.animate_pain()
+            else:
+                self.animate(self.idle)

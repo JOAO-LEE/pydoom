@@ -35,10 +35,6 @@ class ObjectHandler:
         add_npc(NPC(game))
 
 
-
-
-        
-
     def update(self):
         [sprite.update() for sprite in self.sprite_list]  
         [npc.update() for npc in self.npc_list]  
@@ -46,6 +42,7 @@ class ObjectHandler:
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
+        
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
