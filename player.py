@@ -19,6 +19,7 @@ class Player:
 
         keys = pg.key.get_pressed()
         if keys[pg.K_w]:
+            print('pressionou')
             dx += speed_cos
             dy += speed_sin
         if keys[pg.K_s]:
@@ -33,16 +34,22 @@ class Player:
 
         self.check_wall_collision(dx, dy)
 
-        if keys[pg.K_LEFT]:
-            self.angle -= PLAYER_ROT_SPEED * self.game.delta_time
-        if keys[pg.K_RIGHT]:
-            self.angle += PLAYER_ROT_SPEED * self.game.delta_time
+        # if keys[pg.K_LEFT]:
+        #     self.angle -= PLAYER_ROT_SPEED * self.game.delta_time
+        # if keys[pg.K_RIGHT]:
+        #     self.angle += PLAYER_ROT_SPEED * self.game.delta_time
         self.angle %= math.tau
         # running?
         # if keys[pg.K_LSHIFT]:
 
 
-        
+    def mouse_control(self):
+        mx, my = pg.mouse.get_pos()
+        if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
+            pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
+        self.rel = pg.mouse.get_rel()[0]
+        self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
+        self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.world_map
@@ -60,6 +67,7 @@ class Player:
 
     def update(self):
         self.movement()
+        self.mouse_control()
 
     @property
     def pos(self):
